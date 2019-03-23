@@ -1,16 +1,24 @@
+extern crate rand;
+
 use std::io;
+use rand::Rng;
 
 fn main() {
 	let mut is_looping = true;
 	
 	while is_looping {
-		let mut input = get_input();
+		let input = get_input();
+		let mut output = String::new();
 		
 		if input == "q" || input == "quit" {
 			is_looping = false;
 		}
+		else if input.parse::<i32>().is_ok() {
+			output = get_dice_roll(input.parse::<i32>().unwrap()).to_string();
+		}
+			
 		
-		println!("{}", input);
+		println!("{}", output);
 	}
 }
 
@@ -21,4 +29,7 @@ fn get_input() -> std::string::String {
 	return input;
 }
 
-
+fn get_dice_roll(dice: i32) -> i32 {
+	let roll = rand::thread_rng().gen_range(1, dice+1);
+	return roll;
+}
