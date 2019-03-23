@@ -10,15 +10,24 @@ fn main() {
 		let input = get_input();
 		let mut output = String::new();
 		
-		if input == "q" || input == "quit" {
+		// handle potential inputs
+		if input == "" {
+			// just do nothing in this case
+		}
+		else if input == "q" || input == "quit" {
 			is_looping = false;
 		}
 		else if input.parse::<i32>().is_ok() {
 			output = get_dice_roll(input.parse::<i32>().unwrap()).to_string();
 		}
-			
+		else {
+			output = "invalid input".to_string();
+		}
 		
-		println!("{}", output);
+		// print output, if there is any
+		if output != "" {
+			println!("{}", output);
+		}
 	}
 }
 
