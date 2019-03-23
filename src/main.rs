@@ -35,7 +35,24 @@ fn get_output(input: std::string::String) -> std::string::String {
 	if input == "" {
 		return "".to_string();
 	}
-	else if input == "h" || input == "help" {
+	else if is_basic_input(&input) {
+		return get_basic_output(&input);
+	}
+	else {
+		return "invalid input".to_string();
+	}
+}
+
+fn is_basic_input(input: &std::string::String) -> bool {
+	return  input == "h" ||
+			input == "help" ||
+			input == "%" ||
+			input == "percentile" ||
+			input.parse::<i32>().is_ok();
+}
+
+fn get_basic_output(input: &std::string::String) -> std::string::String {
+	if input == "h" || input == "help" {
 		return get_help();
 	}
 	else if input.parse::<i32>().is_ok() {
@@ -44,9 +61,8 @@ fn get_output(input: std::string::String) -> std::string::String {
 	else if input == "%" || input == "percentile" {
 		return get_dice_roll(100).to_string();
 	}
-	else {
-		return "invalid input".to_string();
-	}
+	
+	return "".to_string();
 }
 
 fn get_help() -> std::string::String {
