@@ -17,6 +17,9 @@ fn main() {
 		else if input == "q" || input == "quit" {
 			is_looping = false;
 		}
+		else if input == "h" || input == "help" {
+			output = get_help();
+		}
 		else if input.parse::<i32>().is_ok() {
 			output = get_dice_roll(input.parse::<i32>().unwrap()).to_string();
 		}
@@ -36,6 +39,13 @@ fn get_input() -> std::string::String {
 	io::stdin().read_line(&mut input).expect("Readline failed");
 	input = input.trim().to_lowercase().to_string();
 	return input;
+}
+
+fn get_help() -> std::string::String {
+	return "Help output:
+q/quit:    quit the program
+h/help:    output the help information
+1/2/3...:  roll a dice of that number of sides".to_string();
 }
 
 fn get_dice_roll(dice: i32) -> i32 {
