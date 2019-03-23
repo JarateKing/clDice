@@ -72,28 +72,33 @@ fn get_basic_output(input: &std::string::String) -> std::string::String {
 }
 
 fn is_complex_input(input: &std::string::String) -> bool {
-	let re = Regex::new(r"\d+d\d+").unwrap();
+	let x_d_x = Regex::new(r"\d+d\d+").unwrap();
 	let mut is_good = true;
 
 	let split = input.split("+").collect::<Vec<&str>>();
 	for term in split {
 		let word = term.to_string();
 		let trimmed = word.trim();
-		is_good = is_good && re.is_match(trimmed);
+		let is_good_cur = trimmed.to_string().parse::<i32>().is_ok() ||
+						  x_d_x.is_match(trimmed);
+		is_good = is_good && is_good_cur;
 	}
 	
 	return is_good;
 }
 
 fn get_complex_input(input: &std::string::String) -> std::string::String {
-	let re = Regex::new(r"\d+d\d+").unwrap();
+	let x_d_x = Regex::new(r"\d+d\d+").unwrap();
 	let mut sum = 0;
 	
 	let split = input.split("+").collect::<Vec<&str>>();
 	for term in split {
 		let word = term.to_string();
 		let trimmed = word.trim();
-		if re.is_match(trimmed) {
+		if trimmed.to_string().parse::<i32>().is_ok() {
+			sum += trimmed.to_string().parse::<i32>().unwrap();
+		}
+		else if x_d_x.is_match(trimmed) {
 			let mut split = trimmed.split("d");
 			let dice = split.next().unwrap().to_string().parse::<i32>().unwrap();
 			let sides = split.next().unwrap().to_string().parse::<i32>().unwrap();
