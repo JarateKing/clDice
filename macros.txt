@@ -1,1 +1,2 @@
-testmacro %
+% 100
+percentile 100
