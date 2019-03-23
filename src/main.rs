@@ -7,6 +7,7 @@ use std::fs::File;
 use std::io::BufReader;
 use std::io::BufRead;
 use regex::Regex;
+use std::cmp;
 
 fn main() {
 	let mut is_looping = true;
@@ -72,6 +73,7 @@ fn get_basic_output(input: &std::string::String) -> std::string::String {
 }
 
 fn is_complex_input(input: &std::string::String) -> bool {
+	let x_d_x_adv = Regex::new(r"\d+d\d+adv").unwrap();
 	let x_d_x = Regex::new(r"\d+d\d+").unwrap();
 	let mut is_good = true;
 
@@ -80,6 +82,7 @@ fn is_complex_input(input: &std::string::String) -> bool {
 		let word = term.to_string();
 		let trimmed = word.trim();
 		let is_good_cur = trimmed.to_string().parse::<i32>().is_ok() ||
+						  x_d_x_adv.is_match(trimmed) ||
 						  x_d_x.is_match(trimmed);
 		is_good = is_good && is_good_cur;
 	}
@@ -88,6 +91,7 @@ fn is_complex_input(input: &std::string::String) -> bool {
 }
 
 fn get_complex_input(input: &std::string::String) -> std::string::String {
+	let x_d_x_adv = Regex::new(r"\d+d\d+adv").unwrap();
 	let x_d_x = Regex::new(r"\d+d\d+").unwrap();
 	let mut sum = 0;
 	
@@ -97,6 +101,20 @@ fn get_complex_input(input: &std::string::String) -> std::string::String {
 		let trimmed = word.trim();
 		if trimmed.to_string().parse::<i32>().is_ok() {
 			sum += trimmed.to_string().parse::<i32>().unwrap();
+		}
+		else if x_d_x_adv.is_match(trimmed) {
+			let mut split = trimmed.split("d");
+			let dice = split.next().unwrap().to_string().parse::<i32>().unwrap();
+			let mut nextsides = split.next().unwrap().to_string();
+			nextsides.pop();
+			let sides = nextsides.parse::<i32>().unwrap();
+			let mut total_a = 0;
+			let mut total_b = 0;
+			for i in 0..dice {
+				total_a += get_dice_roll(sides);
+				total_b += get_dice_roll(sides);
+			}
+			sum += cmp::max(total_a, total_b);
 		}
 		else if x_d_x.is_match(trimmed) {
 			let mut split = trimmed.split("d");
