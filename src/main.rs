@@ -2,6 +2,9 @@ extern crate rand;
 
 use std::io;
 use rand::Rng;
+use std::fs::File;
+use std::io::BufReader;
+use std::io::BufRead;
 
 fn main() {
 	let mut is_looping = true;
@@ -38,6 +41,9 @@ fn get_output(input: std::string::String) -> std::string::String {
 	else if is_basic_input(&input) {
 		return get_basic_output(&input);
 	}
+	else if is_macro_input(&input) {
+		return get_output(get_macro_output(&input));
+	}
 	else {
 		return "invalid input".to_string();
 	}
@@ -60,6 +66,46 @@ fn get_basic_output(input: &std::string::String) -> std::string::String {
 	}
 	else if input == "%" || input == "percentile" {
 		return get_dice_roll(100).to_string();
+	}
+	
+	return "".to_string();
+}
+
+fn is_macro_input(input: &std::string::String) -> bool {
+	let f = match File::open("macros.txt") {
+		Ok(v) => v,
+		Err(_e) => return false,
+	};
+	
+	let fb = BufReader::new(&f);
+	for line in fb.lines() {
+		let unwrapped = line.unwrap();
+		let word = unwrapped.split_whitespace().next().unwrap();
+		if word == input {
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+fn get_macro_output(input: &std::string::String) -> std::string::String {
+	let f = match File::open("macros.txt") {
+		Ok(v) => v,
+		Err(_e) => return "".to_string(),
+	};
+	
+	let fb = BufReader::new(&f);
+	for line in fb.lines() {
+		let unwrapped = line.unwrap();
+		let words = unwrapped.split_whitespace().collect::<Vec<&str>>();
+		if words[0] == input {
+			let mut output = String::new();
+			for i in 1..words.len() {
+				output.push_str(words[i]);
+			}
+			return output;
+		}
 	}
 	
 	return "".to_string();
