@@ -174,7 +174,10 @@ fn get_help() -> std::string::String {
 q/quit:       quit the program
 h/help:       output the help information
 1/2/3...:     roll a dice of that number of sides
-%/percentile: roll a d100 dice".to_string();
+%/percentile: roll a d100 dice
+2d6:          roll a six sided dice twice
+1d20adv:      roll a d20 with advantage
+1d6+2d10+3:   roll a complicated expression".to_string();
 }
 
 fn get_dice_roll(dice: i32) -> i32 {
