@@ -74,6 +74,10 @@ h/help:       output the help information
 }
 
 fn get_dice_roll(dice: i32) -> i32 {
+	if dice < 1 {
+		return 0;
+	}
+	
 	let roll = rand::thread_rng().gen_range(1, dice+1);
 	return roll;
 }
