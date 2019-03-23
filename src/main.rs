@@ -73,23 +73,37 @@ fn get_basic_output(input: &std::string::String) -> std::string::String {
 
 fn is_complex_input(input: &std::string::String) -> bool {
 	let re = Regex::new(r"\d+d\d+").unwrap();
-	return re.is_match(input);
+	let mut is_good = true;
+
+	let split = input.split("+").collect::<Vec<&str>>();
+	for term in split {
+		let word = term.to_string();
+		let trimmed = word.trim();
+		is_good = is_good && re.is_match(trimmed);
+	}
+	
+	return is_good;
 }
 
 fn get_complex_input(input: &std::string::String) -> std::string::String {
 	let re = Regex::new(r"\d+d\d+").unwrap();
-	if re.is_match(input) {
-		let mut split = input.split("d");
-		let dice = split.next().unwrap().parse::<i32>().unwrap();
-		let sides = split.next().unwrap().parse::<i32>().unwrap();
-		let mut sum = 0;
-		for i in 0..dice {
-			sum += get_dice_roll(sides);
+	let mut sum = 0;
+	
+	let split = input.split("+").collect::<Vec<&str>>();
+	for term in split {
+		let word = term.to_string();
+		let trimmed = word.trim();
+		if re.is_match(trimmed) {
+			let mut split = trimmed.split("d");
+			let dice = split.next().unwrap().to_string().parse::<i32>().unwrap();
+			let sides = split.next().unwrap().to_string().parse::<i32>().unwrap();
+			for i in 0..dice {
+				sum += get_dice_roll(sides);
+			}
 		}
-		return sum.to_string();
 	}
 	
-	return "".to_string();
+	return sum.to_string();
 }
 
 fn is_macro_input(input: &std::string::String) -> bool {
