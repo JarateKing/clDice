@@ -23,6 +23,9 @@ fn main() {
 		else if input.parse::<i32>().is_ok() {
 			output = get_dice_roll(input.parse::<i32>().unwrap()).to_string();
 		}
+		else if input == "%" || input == "percentile" {
+			output = get_dice_roll(100).to_string();
+		}
 		else {
 			output = "invalid input".to_string();
 		}
@@ -43,9 +46,10 @@ fn get_input() -> std::string::String {
 
 fn get_help() -> std::string::String {
 	return "Help output:
-q/quit:    quit the program
-h/help:    output the help information
-1/2/3...:  roll a dice of that number of sides".to_string();
+q/quit:       quit the program
+h/help:       output the help information
+1/2/3...:     roll a dice of that number of sides
+%/percentile: roll a d100 dice".to_string();
 }
 
 fn get_dice_roll(dice: i32) -> i32 {
