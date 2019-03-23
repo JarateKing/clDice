@@ -1,10 +1,12 @@
 extern crate rand;
+extern crate regex;
 
 use std::io;
 use rand::Rng;
 use std::fs::File;
 use std::io::BufReader;
 use std::io::BufRead;
+use regex::Regex;
 
 fn main() {
 	let mut is_looping = true;
@@ -41,6 +43,9 @@ fn get_output(input: std::string::String) -> std::string::String {
 	else if is_basic_input(&input) {
 		return get_basic_output(&input);
 	}
+	else if is_complex_input(&input) {
+		return get_complex_input(&input);
+	}
 	else if is_macro_input(&input) {
 		return get_output(get_macro_output(&input));
 	}
@@ -61,6 +66,27 @@ fn get_basic_output(input: &std::string::String) -> std::string::String {
 	}
 	else if input.parse::<i32>().is_ok() {
 		return get_dice_roll(input.parse::<i32>().unwrap()).to_string();
+	}
+	
+	return "".to_string();
+}
+
+fn is_complex_input(input: &std::string::String) -> bool {
+	let re = Regex::new(r"\d+d\d+").unwrap();
+	return re.is_match(input);
+}
+
+fn get_complex_input(input: &std::string::String) -> std::string::String {
+	let re = Regex::new(r"\d+d\d+").unwrap();
+	if re.is_match(input) {
+		let mut split = input.split("d");
+		let dice = split.next().unwrap().parse::<i32>().unwrap();
+		let sides = split.next().unwrap().parse::<i32>().unwrap();
+		let mut sum = 0;
+		for i in 0..dice {
+			sum += get_dice_roll(sides);
+		}
+		return sum.to_string();
 	}
 	
 	return "".to_string();
