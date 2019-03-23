@@ -110,7 +110,7 @@ fn get_complex_input(input: &std::string::String) -> std::string::String {
 			let sides = nextsides.parse::<i32>().unwrap();
 			let mut total_a = 0;
 			let mut total_b = 0;
-			for i in 0..dice {
+			for _i in 0..dice {
 				total_a += get_dice_roll(sides);
 				total_b += get_dice_roll(sides);
 			}
@@ -120,7 +120,7 @@ fn get_complex_input(input: &std::string::String) -> std::string::String {
 			let mut split = trimmed.split("d");
 			let dice = split.next().unwrap().to_string().parse::<i32>().unwrap();
 			let sides = split.next().unwrap().to_string().parse::<i32>().unwrap();
-			for i in 0..dice {
+			for _i in 0..dice {
 				sum += get_dice_roll(sides);
 			}
 		}
